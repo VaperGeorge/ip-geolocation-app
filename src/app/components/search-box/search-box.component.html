@@ -1,0 +1,6 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Write down IP or URL</mat-label>
+    <input matInput placeholder="122.222.333.444" formControlName="search" />
+  </mat-form-field>
+</form>
