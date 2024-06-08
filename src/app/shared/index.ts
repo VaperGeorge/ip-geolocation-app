@@ -5,5 +5,8 @@ export * from './services';
 export * from './interfaces';
 
 // TYPES
-
 export * from './types/IpResponse';
+
+// CONSTANTS
+
+export * from './constants/constants';
