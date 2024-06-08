@@ -1,0 +1,34 @@
+:host {
+  .geolocation-wrapper {
+    min-height: 100vh;
+    display: flex;
+    gap: 15px;
+    padding: 25px 0;
+
+    &__left {
+      width: 30%;
+    }
+
+    &__right {
+      width: 70%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+
+      app-map-location {
+        width: 60%;
+        height: 340px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      app-user-location {
+        width: calc(40% - 15px);
+      }
+
+      app-search-box {
+        width: 100%;
+      }
+    }
+  }
+}
