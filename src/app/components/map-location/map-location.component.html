@@ -2,25 +2,27 @@
 <h5 class="map-title">Previous location</h5>
 }@else {
 <h5 class="map-title">Current location</h5>
-}
-
-@if (latitude && longitude) {
-<aol-map>
-  <aol-view [zoom]="2">
-    <aol-coordinate
-      [x]="latitude"
-      [y]="longitude"
-      [srid]="'EPSG:4326'"
-    ></aol-coordinate>
-  </aol-view>
-  <aol-layer-tile>
-    <aol-source-osm></aol-source-osm>
-  </aol-layer-tile>
-</aol-map>
+} @if (latitude && longitude) {
+<div style="height: calc(100% - 50px)">
+  <aol-map>
+    <aol-view [zoom]="8">
+      <aol-coordinate
+        [x]="longitude"
+        [y]="latitude"
+        [srid]="'EPSG:4326'"
+      ></aol-coordinate>
+    </aol-view>
+    <aol-layer-tile>
+      <aol-source-osm></aol-source-osm>
+    </aol-layer-tile>
+    <aol-interaction-default></aol-interaction-default>
+    <aol-control-scaleline></aol-control-scaleline>
+    <aol-control-zoomslider></aol-control-zoomslider>
+    <aol-control-zoom></aol-control-zoom>
+  </aol-map>
+</div>
+}@else { @if (isForHistory) {
+<div class="empty-state">Here you will see the last searched URL or IP</div>
 }@else {
-  @if (isForHistory) {
-  <div class="empty-state">Here you will see the last searched URL or IP</div>
-  }@else {
-  <div class="empty-state">provide an IP address to see the Map</div>
-  }
-}
+<div class="empty-state">provide an IP address to see the Map</div>
+} }
