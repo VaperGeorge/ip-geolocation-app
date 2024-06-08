@@ -27,6 +27,7 @@ export class AppComponent {
   title = 'ip-geolocation-app';
 
   location$ = new ReplaySubject<IpInfo>(2);
+
   previousLocation$ = this.location$.pipe(
     pairwise(),
     map(([p, c]) => p)

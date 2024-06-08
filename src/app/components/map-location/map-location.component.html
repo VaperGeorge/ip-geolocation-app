@@ -1,8 +1,8 @@
-@if (isForHistory) {
-<h5 class="map-title">Previous location</h5>
-}@else {
-<h5 class="map-title">Current location</h5>
-} @if (latitude && longitude) {
+<h5 class="map-title">
+  {{ isForHistory ? "Previous location" : "Current location" }}
+</h5>
+
+@if (latitude && longitude) {
 <div style="height: calc(100% - 50px)">
   <aol-map>
     <aol-view [zoom]="8">
@@ -21,8 +21,12 @@
     <aol-control-zoom></aol-control-zoom>
   </aol-map>
 </div>
-}@else { @if (isForHistory) {
-<div class="empty-state">Here you will see the last searched URL or IP</div>
 }@else {
-<div class="empty-state">provide an IP address to see the Map</div>
-} }
+<div class="empty-state">
+  {{
+    isForHistory
+      ? "Here you will see the last searched URL or IP"
+      : "provide an IP address to see the Map"
+  }}
+</div>
+}
