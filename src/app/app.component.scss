@@ -2,6 +2,7 @@
   .geolocation-wrapper {
     min-height: 100vh;
     display: flex;
+    align-items: stretch;
     gap: 15px;
     padding: 25px 0;
 
@@ -17,9 +18,7 @@
 
       app-map-location {
         width: 60%;
-        height: 340px;
-        border-radius: 5px;
-        overflow: hidden;
+        height: 355px;
       }
 
       app-user-location {
@@ -28,6 +27,7 @@
 
       app-search-box {
         width: 100%;
+        padding-top: 25px;
       }
     }
   }
