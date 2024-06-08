@@ -1,3 +1,7 @@
-<p>
-  all-searches works!
-</p>
+<h5>Search history</h5>
+
+@for (item of ipHistory$ | async; track $index) {
+<div class="history-item">{{ item }}</div>
+}@empty {
+<div class="empty-state">The list of history items is empty</div>
+}
