@@ -1,6 +1,10 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
+<form [formGroup]="searchForm">
   <mat-form-field appearance="outline">
     <mat-label>Write down IP or URL</mat-label>
     <input matInput placeholder="122.222.333.444" formControlName="search" />
+
+    @if (search.hasError('pattern')) {
+    <mat-error>Please provide a correct URL or IP address</mat-error>
+    }
   </mat-form-field>
 </form>
