@@ -14,15 +14,25 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { EMPTY, catchError, debounceTime, filter, switchMap } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  catchError,
+  concatMap,
+  debounceTime,
+  filter,
+  switchMap,
+} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService } from 'ngx-toastr';
 
-import { IpInfo, IpStackService } from '../../shared';
-
-/** Checking for correct URL or IP address */
-const REGEX =
-  /^(?:http[s]?:\/\/(?:[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
+import {
+  IpInfo,
+  IpStackService,
+  REGEX,
+  IP_PATTERN,
+  IpResponse,
+} from '../../shared';
 
 @Component({
   selector: 'app-search-box',
@@ -49,26 +59,55 @@ export class SearchBoxComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.search.valueChanges
+    const ipStream$ = this.getValueChangesStream();
+    const urlStream$ = this.getValueChangesStream(false);
+
+    ipStream$
       .pipe(
-        debounceTime(700),
-        filter(() => !this.search.hasError('pattern')),
         switchMap((ipOrUrl) =>
           this.ipStackService.getGeoLocation(ipOrUrl as string)
-        ),
-        catchError((error) => {
-          this.toastr.error(error);
-          return EMPTY;
-        }),
-        takeUntilDestroyed(this.destroyRef)
+        )
       )
-      .subscribe((result) => {
-        const { latitude, longitude } = result as IpInfo;
-        if (latitude && longitude) {
-          this.ipStackService.setNewIpToHistory(this.search.value as string);
-          this.searchChanged.emit(result as IpInfo);
-        }
-      });
+      .subscribe(this.resultHandler.bind(this));
+
+    urlStream$
+      .pipe(
+        switchMap((ipOrUrl) =>
+          this.ipStackService.getIpAddress(ipOrUrl as string)
+        ),
+        concatMap((ipInfo) => {
+          const ip = ipInfo.results[0].ipAddress;
+          return this.ipStackService.getGeoLocation(ip);
+        })
+      )
+      .subscribe(this.resultHandler.bind(this));
+  }
+
+  private getValueChangesStream(
+    isIpValue: boolean = true
+  ): Observable<string | null> {
+    const checkIsIp = (v: string) =>
+      isIpValue
+        ? !!v?.match(IP_PATTERN)?.length
+        : !!!v?.match(IP_PATTERN)?.length;
+
+    return this.search.valueChanges.pipe(
+      debounceTime(700),
+      filter((v) => !this.search.hasError('pattern') && checkIsIp(v as string)),
+      catchError((error) => {
+        this.toastr.error(error);
+        return EMPTY;
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    );
+  }
+
+  private resultHandler(result: IpResponse) {
+    const { latitude, longitude } = result as IpInfo;
+    if (latitude && longitude) {
+      this.ipStackService.setNewIpToHistory(this.search.value as string);
+      this.searchChanged.emit(result as IpInfo);
+    }
   }
 
   get search() {
