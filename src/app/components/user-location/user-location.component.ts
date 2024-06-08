@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IpInfo } from '../../shared';
 
 @Component({
   selector: 'app-user-location',
@@ -6,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './user-location.component.html',
   styleUrls: ['./user-location.component.scss'],
 })
-export class UserLocationComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
+export class UserLocationComponent {
+  @Input() location: IpInfo | null = null;
 }

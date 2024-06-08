@@ -1,3 +1,42 @@
-<p>
-  user-location works!
-</p>
+<h5>Location Information</h5>
+
+@if (location) {
+<div class="location-info">
+  <ul>
+    <li><strong>IP:</strong> {{ location.ip }}</li>
+    <li><strong>Type:</strong> {{ location.type }}</li>
+    <li>
+      <strong>Continent:</strong> {{ location.continent_name }} ({{
+        location.continent_code
+      }})
+    </li>
+    <li>
+      <strong>Country:</strong> {{ location.country_name }} ({{
+        location.country_code
+      }})
+    </li>
+    <li>
+      <strong>Region:</strong> {{ location.region_name }} ({{
+        location.region_code
+      }})
+    </li>
+    <li><strong>City:</strong> {{ location.city }}</li>
+    <li><strong>ZIP:</strong> {{ location.zip }}</li>
+    <li>
+      <strong>Coordinates:</strong> {{ location.latitude }},
+      {{ location.longitude }}
+    </li>
+    @if (location && location.currency) {
+    <li>
+      <strong>Currency:</strong> {{ location.currency.code }} ({{
+        location.currency.symbol
+      }})
+    </li>
+    }
+  </ul>
+</div>
+}@else {
+<div class="empty-state">
+  Please provide the URL or IP to get user location information
+</div>
+}
