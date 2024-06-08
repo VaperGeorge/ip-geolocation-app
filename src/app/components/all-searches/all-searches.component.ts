@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IpStackService } from '../../shared';
 import { AsyncPipe } from '@angular/common';
 
