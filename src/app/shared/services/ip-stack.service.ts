@@ -1,12 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { IpResponse } from '../types/IpResponse';
-import { BehaviorSubject } from 'rxjs';
-import { IpInfo } from '../interfaces';
-
-const API_KEY = '9f5f3cc80c160959d39844019eb545c6';
-const BASE_URL = 'http://api.ipstack.com/';
+import { IpLayer } from '../interfaces';
+import {
+  GEO_BASE_URL,
+  GEO_API_KEY,
+  API_API_KEY,
+  API_BASE_URL,
+} from '../constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +20,17 @@ export class IpStackService {
   private searchHistory$ = new BehaviorSubject<string[]>([]);
 
   getGeoLocation(ipOrUrl: string) {
-    const url = `${BASE_URL}${ipOrUrl}?access_key=${API_KEY}`;
+    const url = `${GEO_BASE_URL}${ipOrUrl}?access_key=${GEO_API_KEY}`;
     return this.http.get<IpResponse>(url);
   }
 
   getIpAddress(domain: string) {
-    return this.http.get(`https://dnslookupapi.com/api/v1/${domain}/A`);
+    const convertedValue = domain.replace('https://', '');
+    const headers = new HttpHeaders().set('apikey', API_API_KEY);
+
+    return this.http.get<IpLayer>(`${API_BASE_URL}${convertedValue}`, {
+      headers,
+    });
   }
 
   setNewIpToHistory(data: string) {
