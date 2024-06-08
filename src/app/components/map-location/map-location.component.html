@@ -1,3 +1,26 @@
-<p>
-  map-location works!
-</p>
+@if (isForHistory) {
+<h5 class="map-title">Previous location</h5>
+}@else {
+<h5 class="map-title">Current location</h5>
+}
+
+@if (latitude && longitude) {
+<aol-map>
+  <aol-view [zoom]="2">
+    <aol-coordinate
+      [x]="latitude"
+      [y]="longitude"
+      [srid]="'EPSG:4326'"
+    ></aol-coordinate>
+  </aol-view>
+  <aol-layer-tile>
+    <aol-source-osm></aol-source-osm>
+  </aol-layer-tile>
+</aol-map>
+}@else {
+  @if (isForHistory) {
+  <div class="empty-state">Here you will see the last searched URL or IP</div>
+  }@else {
+  <div class="empty-state">provide an IP address to see the Map</div>
+  }
+}
