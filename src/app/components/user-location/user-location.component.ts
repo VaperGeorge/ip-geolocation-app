@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IpInfo } from '../../shared';
 
 @Component({
@@ -6,6 +6,7 @@ import { IpInfo } from '../../shared';
   standalone: true,
   templateUrl: './user-location.component.html',
   styleUrls: ['./user-location.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserLocationComponent {
   @Input() location: IpInfo | null = null;

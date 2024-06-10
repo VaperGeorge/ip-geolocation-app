@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AngularOpenlayersModule } from 'ng-openlayers';
 
 @Component({
@@ -7,6 +7,7 @@ import { AngularOpenlayersModule } from 'ng-openlayers';
   imports: [AngularOpenlayersModule],
   templateUrl: './map-location.component.html',
   styleUrls: ['./map-location.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapLocationComponent {
   @Input() latitude!: number;

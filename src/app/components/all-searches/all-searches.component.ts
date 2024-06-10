@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IpStackService } from '../../shared';
 import { AsyncPipe } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { AsyncPipe } from '@angular/common';
   imports: [AsyncPipe],
   templateUrl: './all-searches.component.html',
   styleUrls: ['./all-searches.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllSearchesComponent {
   private readonly ipStackService = inject(IpStackService);
