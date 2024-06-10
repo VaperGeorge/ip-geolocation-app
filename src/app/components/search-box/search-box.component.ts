@@ -22,6 +22,7 @@ import {
   debounceTime,
   filter,
   switchMap,
+  tap,
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService } from 'ngx-toastr';
@@ -53,6 +54,7 @@ export class SearchBoxComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   @Output() searchChanged = new EventEmitter<IpInfo>();
+  @Output() loading = new EventEmitter<boolean>(false);
 
   searchForm = this.fb.group({
     search: this.fb.control('', Validators.pattern(REGEX)),
@@ -94,6 +96,7 @@ export class SearchBoxComponent implements OnInit {
     return this.search.valueChanges.pipe(
       debounceTime(700),
       filter((v) => !this.search.hasError('pattern') && checkIsIp(v as string)),
+      tap(() => this.loading.emit(true)),
       catchError((error) => {
         this.toastr.error(error);
         return EMPTY;
@@ -108,6 +111,8 @@ export class SearchBoxComponent implements OnInit {
       this.ipStackService.setNewIpToHistory(this.search.value as string);
       this.searchChanged.emit(result as IpInfo);
     }
+
+    this.loading.emit(false);
   }
 
   get search() {
